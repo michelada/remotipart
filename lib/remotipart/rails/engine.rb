@@ -14,7 +14,7 @@ module Remotipart
       end
 
       initializer "remotipart.include_middelware" do
-        config.app_middleware.insert_after ActionDispatch::ParamsParser, Middleware
+        config.app_middleware.use Middleware
       end
     end
 

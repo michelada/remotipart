@@ -5,19 +5,16 @@ module Remotipart
     include ERB::Util
 
     def self.included(base)
-      base.class_eval do
-        alias_method_chain :render, :remotipart
+      base.class_eval do        
+        before_action :set_response_content_type
       end
     end
 
-    def render_with_remotipart *args
-      render_without_remotipart *args
-      if remotipart_submitted?
-        textarea_body = response.content_type == 'text/html' ? html_escape(response.body) : response.body
-        response.body = %{<script type=\"text/javascript\">try{window.parent.document;}catch(err){document.domain=document.domain;}</script>#{textarea_body}}
-        response.content_type = Mime::HTML
-      end
-      response_body
-    end
+
+    def set_response_content_type
+       if remotipart_submitted?
+         response.content_type = Mime[:JS]
+       end
+     end
   end
 end
