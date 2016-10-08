@@ -115,10 +115,13 @@
     // and should revert all changes made to the page to enable the
     // submission via this transport.
     function cleanUp() {
-      markers.prop('disabled', false);
+      markers.each(function(i){
+        $(this).replaceWith(files[i]);
+        markers.splice(i, 1);
+      });
       form.remove();
       iframe.bind("load", function() { iframe.remove(); });
-      iframe.attr("src", "javascript:false;");
+      iframe.attr("src", "about:blank");
     }
 
     // Remove "iframe" from the data types list so that further processing is
@@ -175,7 +178,7 @@
         // The `send` function is called by jQuery when the request should be
         // sent.
         send: function(headers, completeCallback) {
-          iframe = $("<iframe src='javascript:false;' name='" + name +
+          iframe = $("<iframe src='about:blank' name='" + name +
             "' id='" + name + "' style='display:none'></iframe>");
 
           // The first load event gets fired after the iframe has been injected
